@@ -1,4 +1,4 @@
-package com.stream.services;
+package com.stream.app.services;
 
 import java.util.List;
 
