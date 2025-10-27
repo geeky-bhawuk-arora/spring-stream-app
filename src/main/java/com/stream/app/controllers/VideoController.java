@@ -21,6 +21,10 @@ public class VideoController {
 
     VideoService videoService;
 
+    public VideoController(VideoService videoService) {
+        this.videoService = videoService;
+    }
+
 
     @PostMapping
     public ResponseEntity<CustomMessage> create (
