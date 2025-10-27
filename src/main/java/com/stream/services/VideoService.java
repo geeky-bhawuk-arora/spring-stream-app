@@ -1,0 +1,18 @@
+package com.stream.services;
+
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
+
+import com.stream.app.entities.Video;
+
+public interface VideoService {
+    
+    Video save(Video save, MultipartFile file);
+
+    Video get(String videoId);
+
+    Video getByTitle(String title);
+
+    List<Video> getAll();
+}
