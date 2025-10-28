@@ -33,14 +33,17 @@ export const useUpload = () => {
     setUploadProgress(0);
 
     try {
-      const response = await uploadVideo(uploadData, (progress) => {
+      // Renamed 'response' to '_response' to satisfy the ESLint rule
+      const _response = await uploadVideo(uploadData, (progress) => {
         setUploadProgress(progress);
       });
 
       setMessage({ type: 'success', text: 'Video uploaded successfully!' });
       setUploadData({ title: '', description: '', file: null });
       setTimeout(() => setUploading(false), 1000);
-    } catch (error) {
+
+    // eslint-disable-next-line no-unused-vars
+    } catch (_error) {
       setMessage({ type: 'error', text: 'Upload failed. Please try again.' });
       setUploading(false);
     }
