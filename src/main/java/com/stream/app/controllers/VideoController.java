@@ -1,6 +1,8 @@
 package com.stream.app.controllers;
 
 import java.util.UUID;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +40,32 @@ public class VideoController {
             video.setDescription(description);
             video.setVideoId(UUID.randomUUID().toString());
 
-            videoService.save(video, file);
+            Video savedVideo = videoService.save(video, file);
 
-            return null;
+            if(savedVideo != null) {
+                Map<String, Object> metadata = new HashMap<>();
+                metadata.put("videoId", savedVideo.getVideoId());
+                metadata.put("title", savedVideo.getTitle());
+                metadata.put("description", savedVideo.getDescription());
+                metadata.put("originalFilename", file.getOriginalFilename());
+                metadata.put("contentType", file.getContentType());
+                metadata.put("size", file.getSize());
+
+                return ResponseEntity
+                        .status(HttpStatus.OK)
+                        .body(CustomMessage.builder()
+                                .message("video uploaded successfully")
+                                .success(true)
+                                .metadata(metadata)
+                                .build());           
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(CustomMessage.builder()
+                                .message("video not uploaded !!")
+                                .success(false)
+                                .build()); 
+            }
         }
     
 }
