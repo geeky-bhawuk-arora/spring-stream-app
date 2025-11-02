@@ -33,12 +33,20 @@ export const useUpload = () => {
     setUploadProgress(0);
 
     try {
-      // Renamed 'response' to '_response' to satisfy the ESLint rule
       const _response = await uploadVideo(uploadData, (progress) => {
         setUploadProgress(progress);
       });
 
-      setMessage({ type: 'success', text: 'Video uploaded successfully!' });
+      // support axios (response.data) and direct return (response)
+      const payload = _response?.data ?? _response;
+      const metadata = payload?.metadata;
+
+      const videoId = metadata?.videoId;
+      const successText = videoId
+        ? `Video uploaded successfully (id: ${videoId})`
+        : 'Video uploaded successfully!';
+
+      setMessage({ type: 'success', text: successText });
       setUploadData({ title: '', description: '', file: null });
       setTimeout(() => setUploading(false), 1000);
 
